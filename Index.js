@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
-// 1. IMPORTAMOS LA LIBRERÍA DE GOOGLE
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { setDefaultResultOrder } from 'node:dns';
 
-dotenv.config();
+// 1. MANTENEMOS EL ARREGLO DE INTERNET
+setDefaultResultOrder('ipv4first');
 
 const app = express();
 const port = 3000;
@@ -12,33 +12,32 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-// 2. CONFIGURAMOS LA IA (Pega tu API Key aquí donde dice "TU_API_KEY_AQUI")
-const genAI = new GoogleGenerativeAI("TU_API_KEY_AQUI_O_EN_ENV");
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+// 2. ¡AQUÍ ESTÁ EL TRUCO!
+// Borra el texto de abajo (incluyendo las comillas si quieres, pero asegúrate de que quede entre comillas al final)
+// Y pega la clave que acabas de copiar de la página de Google.
+const genAI = new GoogleGenerativeAI("AIzaSyBUpSDBOJhX2p8q8XPoKtO3uZMUwgj3ZtI");
 
-app.get('/', (req, res) => {
-  res.send('¡Servidor de PC Builder AI funcionando! 🤖');
-});
+// 3. USAMOS EL MODELO QUE SALIÓ EN TU LISTA (El 2.5 Flash)
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-// 3. CREAMOS LA RUTA DEL CHAT
+app.get('/', (req, res) => res.send('¡Servidor PC Builder Activo! 🤖'));
+
 app.post('/chat', async (req, res) => {
   try {
-    const { mensaje } = req.body; // El frontend nos manda el mensaje
-    
-    // Le preguntamos a Gemini
+    const { mensaje } = req.body;
+    console.log("📩 Tu mensaje:", mensaje);
+
     const result = await model.generateContent(mensaje);
     const response = await result.response;
     const text = response.text();
 
-    // Le respondemos al frontend
+    console.log("✅ ¡La IA respondió!");
     res.json({ respuesta: text });
-    
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "La IA se mareó" });
+    console.error("❌ ERROR:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
-app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
-});
+app.listen(port, () => console.log(`🚀 Servidor listo en http://localhost:${port}`));
