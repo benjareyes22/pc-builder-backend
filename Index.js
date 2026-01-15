@@ -15,7 +15,7 @@ app.use(express.json());
 // 2. ¡AQUÍ ESTÁ EL TRUCO!
 // Borra el texto de abajo (incluyendo las comillas si quieres, pero asegúrate de que quede entre comillas al final)
 // Y pega la clave que acabas de copiar de la página de Google.
-const genAI = new GoogleGenerativeAI("AIzaSyBUpSDBOJhX2p8q8XPoKtO3uZMUwgj3ZtI");
+const genAI = new GoogleGenerativeAI("AIzaSyBb5ZRLtjYEAILMbx7uWRNP0TJjVLCwVmU");
 
 // 3. USAMOS EL MODELO QUE SALIÓ EN TU LISTA (El 2.5 Flash)
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
